@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect,} from "react"
 import MovieList from "./components/MovieList";
 import MovieForm from "./components/MovieForm";
 
@@ -11,6 +11,24 @@ function App() {
 
   const [title, setTitle] = useState("")
   const [editingId, setEditingId] = useState(null)
+
+   useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/posts?_limit=5")
+      .then((res) => res.json())
+      .then((data) => {
+        const formatted = data.map((item) => ({
+          id: item.id,
+          title: item.title,
+        }));
+
+        setMovies((prev) => { 
+          if (prev.length === 0) {
+            return formatted;
+          }
+          return prev;
+        });
+      });
+  }, []);
 
 
   useEffect(() => {
