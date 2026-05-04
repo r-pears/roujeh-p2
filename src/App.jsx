@@ -1,13 +1,24 @@
-import { useState } from "react"
-import MovieList from "./MovieList";
+import { useState, useEffect } from "react"
+import MovieList from "./components/MovieList";
+import MovieForm from "./components/MovieForm";
 
 function App() {
 
-  const [movies, setMovies] = useState([])
+  const [movies, setMovies] = useState(() => {
+    const savedMovies = localStorage.getItem("movies");
+    return savedMovies ? JSON.parse(savedMovies) : [];
+  });
+
   const [title, setTitle] = useState("")
   const [editingId, setEditingId] = useState(null)
+
+
+  useEffect(() => {
+    localStorage.setItem("movies", JSON.stringify(movies));
+  }, [movies]);
+
   const addMovie =() => {
-    if (title === "") return
+    if (title.trim() === "") return
 
     setMovies([...movies, { id: Date.now(), title }])
     setTitle("")
@@ -29,6 +40,13 @@ function App() {
     setEditingId(null)
     setTitle("")
   }
+  const handleSubmit = () => {  
+    if (editingId) {
+      updateMovie(editingId)
+    } else {
+      addMovie();
+    }
+  };
   
     return (
     <div style={{
@@ -37,20 +55,12 @@ function App() {
       fontFamily: "Arial"
     }}>
       <h1>My Movie App</h1>
-      <input 
-        type="text"
-        placeholder="Enter movie title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        style={{ padding: "6px", marginRight: "10px" }}
-
+      <MovieForm
+        title={title}
+        setTitle={setTitle}
+        onSubmit={handleSubmit}
+        isEditing={editingId !== null}
       />
-      <button 
-      onClick={addMovie}
-      style={{ padding: "6px 12px", cursor: "pointer" }}
-        >
-          Add Movie
-      </button>
 
       <p>Number of movies: {movies.length}</p>
     {movies.length === 0  && <p>No movies yet </p>}
@@ -59,10 +69,6 @@ function App() {
 movies={movies}
 deleteMovie={deleteMovie}
 startEdit={startEdit}
-editingId={editingId}
-title={title}
-setTitle={setTitle}
-updateMovie={updateMovie}
 />
     </div>
   );
