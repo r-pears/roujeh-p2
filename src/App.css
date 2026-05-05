@@ -1,9 +1,14 @@
+/* REVIEW: This file is never imported (no `import "./App.css"` anywhere), so none of these rules apply. Either import it in App.jsx and use the classes, or delete the file to avoid confusion. */
+/* REVIEW: Indentation inside this rule is missing properties should be indented under the selector for readability. */
+/* REVIEW: `margin-top: auto` only does something inside a flex/grid container with extra space. For "push down from the top" you probably want a fixed value like `margin-top: 50px` (which matches the inline style currently in App.jsx). */
 .app-container {
-text-align: center;
-margin-top: auto;
-font-family: Arial, sans-serif;
+  text-align: center;
+  margin-top: auto;
+  font-family: Arial, sans-serif;
 }
 
+/* REVIEW: Solid base styling for buttons but no element in the app has `className="btn"`, so it's never applied. Add it to the Edit/Delete/Submit buttons. */
+/* REVIEW: Consider adding distinct styles for the Delete action (e.g. a red background) so destructive actions are visually distinguishable from safe ones. Good UX practice. */
 .btn {
   padding: 6px 12px;
   cursor: pointer;
@@ -17,7 +22,7 @@ font-family: Arial, sans-serif;
 
 input {
   padding: 6px;
-  margin-right: 10px; 
+  margin-right: 10px;
   border: 1px solid var(--border);
   border-radius: 4px;
 }
